@@ -2,19 +2,85 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const { Eureka } = require('eureka-js-client'); // Importer Eureka client
-const Keycloak = require('keycloak-connect');
-const session = require('express-session');
 
+const mongoose = require('mongoose'); // Importer Mongoose
+const User = require('./models/User'); // Importer le modèle User
 
+// Middleware pour parser le JSON
+app.use(express.json());
 
+// Connexion à MongoDB
+mongoose.connect('mongodb://localhost:27017/AgriShare', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+    .then(() => console.log('Connecté à MongoDB'))
+    .catch(err => console.error('Erreur de connexion à MongoDB:', err));
 
-app.get('/user/api/data', (req, res) => {
-    res.json({ message: 'Hello from Node.js microservice!' });
+// Route pour ajouter un utilisateur
+app.post('/user/api/add', async (req, res) => {
+    const { name, email, password } = req.body;
+    const user = new User({ name, email, password });
+
+    try {
+        await user.save();
+        res.json({ message: 'Utilisateur ajouté avec succès', user });
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur lors de l’ajout de l’utilisateur', error });
+    }
 });
+/*Get all*/
+app.get('/user/api/all', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs', error });
+    }
+});
+/*Get By Id*/
+app.get('/user/api/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur lors de la récupération de l’utilisateur', error });
+    }
+});
+/*Update*/
+app.put('/user/api/:id', async (req, res) => {
+    const { name, email, password } = req.body;
+
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { name, email, password },
+            { new: true, runValidators: true }
+        );
+        if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        res.json({ message: 'Utilisateur mis à jour avec succès', user });
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur lors de la mise à jour de l’utilisateur', error });
+    }
+});
+
+/*Delete*/
+app.delete('/user/api/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        res.json({ message: 'Utilisateur supprimé avec succès' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur lors de la suppression de l’utilisateur', error });
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Node.js microservice running on port ${port}`);
 });
+
 
 // Configuration du client Eureka
 const client = new Eureka({
@@ -45,3 +111,4 @@ const client = new Eureka({
 client.start(error => {
     console.log(error ? `Erreur lors de l’enregistrement dans Eureka: ${error}` : 'Enregistré avec succès dans Eureka');
 });
+

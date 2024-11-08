@@ -6,7 +6,8 @@
     "express": "^4.21.1",
     "express-session": "^1.18.1",
     "keycloak-admin": "^1.14.22",
-    "keycloak-connect": "23.0.0"
+    "keycloak-connect": "23.0.0",
+    "mongoose": "^8.8.0"
   },
   "scripts": {
     "start": "node index.js",
