@@ -45,4 +45,3 @@ const client = new Eureka({
 client.start(error => {
     console.log(error ? `Erreur lors de l’enregistrement dans Eureka: ${error}` : 'Enregistré avec succès dans Eureka');
 });
-

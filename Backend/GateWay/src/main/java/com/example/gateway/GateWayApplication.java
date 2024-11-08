@@ -25,15 +25,15 @@ public class GateWayApplication {
                 .route("MS-Projet", r->r.path("/projet/**")
                         .uri("http://localhost:8093/"))
 
-               .route("MS-Reclamation", r->r.path("/reclamation/**")
+                .route("MS-Reclamation", r->r.path("/reclamation/**")
                         .uri("http://localhost:8092/"))
                 .route("MS-Recolte", r->r.path("/recolte/**")
                         .uri("http://localhost:8094/"))
                 .route("MS-Ressources", r->r.path("/ressources/**")
                         .uri("http://localhost:8095/"))
-              // Nouvelle route pour le microservice Node.js MS-User
-               /* .route("MS-User", r -> r.path("/user/**")
-                        .uri("http://localhost:3000/"))*/
+                // Nouvelle route pour le microservice Node.js MS-User
+                /* .route("MS-User", r -> r.path("/user/**")
+                         .uri("http://localhost:3000/"))*/
                 .build();
     }
 
