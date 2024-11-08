@@ -14,16 +14,25 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MsFormationApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(MsFormationApplication.class, args);
-    }
     @Autowired
-    private FormationRepo repository ;
+    private FormationRepo formationRepo;
+
     @Bean
     ApplicationRunner init(){
         return (args -> {
 
-            repository.findAll().forEach(System.out::println);
+            formationRepo.findAll().forEach(System.out::println);
         }) ;
     }
-}
+
+
+    public static void main(String[] args) {
+        SpringApplication.run(MsFormationApplication.class, args);
+    }
+
+
+    }
+
+
+
+
