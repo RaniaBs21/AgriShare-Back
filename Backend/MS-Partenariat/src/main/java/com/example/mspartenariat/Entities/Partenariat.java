@@ -1,10 +1,7 @@
 package com.example.mspartenariat.Entities;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Partenariat {
@@ -16,16 +13,22 @@ public class Partenariat {
     private String prenom;
     private String email;
     private String numeroTelephone;
-
+    @Lob // Indique qu'il s'agit d'un gros objet binaire (image)
+    private byte[] image;
+    @Transient
+    private String imageBase64;
     // Constructeur par défaut (requis par JPA)
     public Partenariat() {}
 
+
+
     // Constructeur avec paramètres
-    public Partenariat(String nom, String prenom, String email, String numeroTelephone) {
+    public Partenariat(String nom, String prenom, String email, String numeroTelephone, byte[] image) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.numeroTelephone = numeroTelephone;
+        this.image = image;
     }
 
     // Getters et Setters
@@ -70,6 +73,14 @@ public class Partenariat {
         this.numeroTelephone = numeroTelephone;
     }
 
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
     // Méthode toString() pour afficher un résumé de l'objet
     @Override
     public String toString() {
@@ -79,6 +90,10 @@ public class Partenariat {
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
                 ", numeroTelephone='" + numeroTelephone + '\'' +
+                ", image=" + (image != null ? "Image present" : "Pas d'image") +
                 '}';
+    }
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
     }
 }

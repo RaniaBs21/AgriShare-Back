@@ -3,6 +3,7 @@ package com.example.mspartenariat.Controllers;
 import com.example.mspartenariat.Entities.Partenariat;
 import com.example.mspartenariat.Services.PartenariatService;
 import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,21 +11,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("partenariat")
 @AllArgsConstructor
 public class PartenariatController {
+
     @Autowired
     private PartenariatService partenariatService;
 
     // Créer un partenariat
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Partenariat> createPartenariat(@RequestBody Partenariat partenariat) {
-        return new ResponseEntity<>(partenariatService.addPartenariat(partenariat), HttpStatus.CREATED);
+    public Partenariat addPartenariat(@RequestParam("nom") String nom,
+                                      @RequestParam("prenom") String prenom,
+                                      @RequestParam("email") String email,
+                                      @RequestParam("numeroTelephone") String numeroTelephone,
+                                      @RequestParam("image") MultipartFile image) throws IOException {
+        byte[] imageData = image.getBytes(); // Convertir l'image en tableau de bytes
+        Partenariat partenariat = new Partenariat(nom, prenom, email, numeroTelephone, imageData);
+        return partenariatService.addPartenariat(partenariat); // Sauvegarder le partenariat avec l'image
     }
 
     // Récupérer tous les partenariats

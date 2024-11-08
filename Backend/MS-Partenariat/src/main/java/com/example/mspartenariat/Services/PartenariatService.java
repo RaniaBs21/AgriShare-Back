@@ -4,13 +4,17 @@ import com.example.mspartenariat.Repositories.PartenariatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
 public class PartenariatService {
     @Autowired
     private PartenariatRepository partenariatRepository;
-
+    // Méthode pour convertir l'image en base64
+    private String convertImageToBase64(byte[] image) {
+        return Base64.getEncoder().encodeToString(image);
+    }
     // Ajouter un partenariat
     public Partenariat addPartenariat(Partenariat partenariat) {
         return partenariatRepository.save(partenariat);
@@ -18,7 +22,16 @@ public class PartenariatService {
 
     // Récupérer tous les partenariats
     public List<Partenariat> getAll() {
-        return partenariatRepository.findAll();
+        List<Partenariat> partenariats = partenariatRepository.findAll();
+
+        // Convertir les images en base64 pour chaque partenariat
+        for (Partenariat p : partenariats) {
+            if (p.getImage() != null) {
+                p.setImageBase64(convertImageToBase64(p.getImage()));
+            }
+        }
+
+        return partenariats;
     }
 
     // Mettre à jour un partenariat par son ID
