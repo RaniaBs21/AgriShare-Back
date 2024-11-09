@@ -29,7 +29,7 @@ public class RessourcesController {
         return ressourcesService.ajouterEquipement(equipement);
 
     }
-    @GetMapping
+    @GetMapping("/getEquipement")
     public List<Equipement> getEquipement() {
         return ressourcesService.getAllEquipements();
     }
@@ -60,7 +60,7 @@ public class RessourcesController {
         return ressourcesService.ajouterRessource(ressource);
     }
 
-    @GetMapping
+    @GetMapping("/getRessources")
     List<Ressources> getRessources(){
         return ressourcesService.getAllRessources();
     }
