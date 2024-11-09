@@ -1,0 +1,113 @@
+version: "3.3"
+services:
+ # nom du conteneur eureka
+  discovery:
+    build: D:/5SAE5/AgriShare/Backend/EurekaServer
+    ports:
+      - "8761:8761" 
+    image: "eureka" 
+
+ # nom du conteneur projet(MongoDB)
+  projet:
+    build: D:/5SAE5/AgriShare/Backend/MS-Projet
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - spring.data.mongodb.uri=mongodb://mongodb:27017/AgriShare
+    ports:
+      - "8093:8093"
+    image: "Projet-service" 
+    depends_on:
+      - discovery
+      - mongodb
+
+# nom du conteneur Recolte(MongoDB)
+  recolte:
+    build: D:/5SAE5/AgriShare/Backend/MS-Recolte
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - spring.data.mongodb.uri=mongodb://mongodb:27017/AgriShare
+    ports:
+      - "8094:8094"
+    image: "Recolte-service" 
+    depends_on:
+      - discovery
+      - mongodb
+
+# nom du conteneur Ressources(MongoDB)
+  ressources:
+    build: D:/5SAE5/AgriShare/Backend/MS-Ressources
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - spring.data.mongodb.uri=mongodb://mongodb:27017/AgriShare
+    ports:
+      - "8095:8095"
+    image: "Ressources-service" 
+    depends_on:
+      - discovery
+      - mongodb
+
+
+ # nom du conteneur Formation(Mysql)
+
+  formation:
+      build: D:/5SAE5/AgriShare/Backend/MS-Formation
+      environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql_1:3306/AgriShare?autoReconnect=true&useSSL=false   
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+      ports:
+      - "8090:8090"
+      image: "Formation-service"
+      depends_on:
+      - discovery
+      - docker-mysql
+
+# nom du conteneur Reclamation(Mysql)
+
+  reclamation:
+      build: D:/5SAE5/AgriShare/Backend/MS-Reclamation
+      environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql_1:3306/AgriShare?autoReconnect=true&useSSL=false   
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+      ports:
+      - "8092:8092"
+      image: "Reclamation-service"
+      depends_on:
+      - discovery
+      - docker-mysql
+
+# nom du conteneur Partenariat(Mysql)
+
+  partenariat:
+      build: D:/5SAE5/AgriShare/Backend/MS-Partenariat
+      environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql_1:3306/AgriShare?autoReconnect=true&useSSL=false   
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+      ports:
+      - "8091:8091"
+      image: "Partenariat-service"
+      depends_on:
+      - discovery
+      - docker-mysql
+
+ # nom du conteneur Mysql
+  docker-mysql:
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=AgriShare
+    ports:
+      - 3306:3306
+
+ # nom du conteneur MongoDB
+  mongodb:
+    image: "mongo:latest"
+    environment:
+      - MONGO_INITDB_DATABASE=AgriShare
+    ports:
+      - 27017:27017
