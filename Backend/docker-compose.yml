@@ -122,6 +122,14 @@ services:
     networks:
       - keycloak-net
 
+  front-service:
+    build: D:\5SAE5\AgriShare-project\front\Frontoffice\AgriShare-front
+    ports:
+      - 4200:4200
+    depends_on:
+      - projet
+
+
     # Keycloak avec MySQL
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.0
