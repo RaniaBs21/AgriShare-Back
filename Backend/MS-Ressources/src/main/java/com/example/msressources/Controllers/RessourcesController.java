@@ -22,27 +22,16 @@ import java.util.Map;
 public class RessourcesController {
     RessourcesService ressourcesService;
 
-    @PostMapping( value = "/addEquipements",  consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAuthority('admin')")
-    public ResponseEntity<Equipement> ajouterEquipement(@RequestBody Equipement equipement, Authentication authentication) {
-        try {
-            Jwt jwt = (Jwt) authentication.getPrincipal();
-            Map<String, Object> realmAccess = jwt.getClaimAsMap("realm_access");
-            List<String> roles = (List<String>) realmAccess.get("roles");
-            if (roles.contains("admin")) {
-            return new ResponseEntity<>(ressourcesService.ajouterEquipement(equipement), HttpStatus.CREATED);
-            } else {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PostMapping( "/addEquipements")
+
+    public Equipement ajouterEquipement(@RequestBody Equipement equipement) {
+
+        return ressourcesService.ajouterEquipement(equipement);
+
     }
     @GetMapping
-    public ResponseEntity<List<Equipement>> getEquipement() {
-        return new ResponseEntity<>(ressourcesService.getAllEquipements(), HttpStatus.OK);
+    public List<Equipement> getEquipement() {
+        return ressourcesService.getAllEquipements();
     }
 
 
@@ -66,15 +55,15 @@ public class RessourcesController {
     //ressources
 
 
-  @PostMapping("/addRessource")
+    @PostMapping("/addRessource")
     public Ressources ajouterRessource(@RequestBody Ressources ressource) {
         return ressourcesService.ajouterRessource(ressource);
     }
 
-//    @GetMapping()
-//    List<Ressources> getRessources(){
-//        return ressourcesService.getAllRessources();
-//    }
+    @GetMapping
+    List<Ressources> getRessources(){
+        return ressourcesService.getAllRessources();
+    }
 
     @GetMapping("/getRessource/{id}")
     public Ressources getRessourceById(@PathVariable String id) {
