@@ -15,11 +15,9 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity serverHttpSecurity) {
         return serverHttpSecurity.csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange(exchange -> exchange.pathMatchers("/eureka/**")
-                        .permitAll()
-                        .anyExchange().authenticated()
-                ).oauth2ResourceServer((oauth) -> oauth
-                        .jwt(Customizer.withDefaults()))
+                .authorizeExchange(exchange -> exchange
+                        .pathMatchers("/**").permitAll() // Permet l'accès à toutes les routes sans authentification
+                )
                 .build();
     }
 
