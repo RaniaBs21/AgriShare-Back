@@ -3,16 +3,19 @@ package com.example.msprojet.Controllers;
 import com.example.msprojet.Entities.Project;
 import com.example.msprojet.Services.ProjectService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("projet")
 @AllArgsConstructor
-public class ProjetController {
+public class ProjectController {
+
     ProjectService projectService;
 
     @PostMapping("/add")
@@ -42,4 +45,41 @@ public class ProjetController {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    /*@PostMapping(
+            value = "/admin/add",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('admin')")
+    public ResponseEntity<Project> createProject(@RequestBody Project project , Authentication authentication) {
+
+        try {
+            Jwt jwt = (Jwt) authentication.getPrincipal();
+            Map<String, Object> realmAccess = jwt.getClaimAsMap("realm_access");
+            List<String> roles = (List<String>) realmAccess.get("roles");
+
+            if (roles.contains("admin")) {
+                return new ResponseEntity<>(projectService.addProject(project), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/admin")
+    @PreAuthorize("hasAuthority('admin')")
+    public ResponseEntity<List<Project>> getProject(){
+        return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
+    }*/
+
+
+
+
+
+
 }

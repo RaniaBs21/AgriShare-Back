@@ -32,6 +32,7 @@
         <spring-cloud.version>2023.0.3</spring-cloud.version>
     </properties>
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
@@ -47,7 +48,7 @@
             <scope>test</scope>
         </dependency>
         <!--dependances securité keycloak-->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
@@ -67,7 +68,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 
@@ -100,15 +101,15 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>netflix-Projets</id>
-            <name>Netflix Projets</name>
-            <url>https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-Projets</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>netflix-Projets</id>-->
+<!--            <name>Netflix Projets</name>-->
+<!--            <url>https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-Projets</url>-->
+<!--            <snapshots>-->
+<!--                <enabled>false</enabled>-->
+<!--            </snapshots>-->
+<!--        </repository>-->
+<!--    </repositories>-->
 
 </project>

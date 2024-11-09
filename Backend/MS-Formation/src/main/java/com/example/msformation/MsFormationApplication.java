@@ -1,6 +1,5 @@
 package com.example.msformation;
 
-import com.example.msformation.Repositories.FormationRepo;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -17,13 +16,5 @@ public class MsFormationApplication {
     public static void main(String[] args) {
         SpringApplication.run(MsFormationApplication.class, args);
     }
-    @Autowired
-    private FormationRepo repository ;
-    @Bean
-    ApplicationRunner init(){
-        return (args -> {
 
-            repository.findAll().forEach(System.out::println);
-        }) ;
-    }
 }

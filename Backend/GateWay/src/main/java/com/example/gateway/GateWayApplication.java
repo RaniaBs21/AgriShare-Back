@@ -17,24 +17,23 @@ public class GateWayApplication {
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return  builder.routes()
-                .route("MS-Formation", r->r.path("/formation/**")
-                        .uri("http://localhost:8090/"))
-                .route("MS-Partenariat", r->r.path("/partenariat/**")
-                        .uri("http://localhost:8091/"))
-
                 .route("MS-Projet", r->r.path("/projet/**")
-                        .uri("http://localhost:8093/"))
+                        .uri("http://projet:8093/"))
+                .route("MS-Recolte", r->r.path("/recolte/**")
+                        .uri("http://recolte:8094/"))
+                .route("MS-Ressources", r->r.path("/ressources/**")
+                        .uri("http://ressources:8095/"))
 
                 .route("MS-Reclamation", r->r.path("/reclamation/**")
-                        .uri("http://localhost:8092/"))
-                .route("MS-Recolte", r->r.path("/recolte/**")
-                        .uri("http://localhost:8094/"))
-                .route("MS-Ressources", r->r.path("/ressources/**")
-                        .uri("http://localhost:8095/"))
+                        .uri("http://reclamation:8092/"))
+                .route("MS-Formation", r->r.path("/formation/**")
+                        .uri("http://formation:8090/"))
+                .route("MS-Partenariat", r->r.path("/partenariat/**")
+                        .uri("http://partenariat:8091/"))
+                .build();
                 // Nouvelle route pour le microservice Node.js MS-User
                 /* .route("MS-User", r -> r.path("/user/**")
                          .uri("http://localhost:3000/"))*/
-                .build();
     }
 
 }
