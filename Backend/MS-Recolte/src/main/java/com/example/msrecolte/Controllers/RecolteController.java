@@ -30,12 +30,11 @@ public class RecolteController {
         recolteService.supprimerRecolte(id);
     }
 
-
-
     @GetMapping("/{id}")
     public recolte obtenirRecolteParId(@PathVariable String id) {
         return recolteService.obtenirRecolteParId(id);
     }
+
     @GetMapping("/AllRecoltes")
     public List<recolte> obtenirRecoltes() {
         return recolteService.obtenirRecoltes();
