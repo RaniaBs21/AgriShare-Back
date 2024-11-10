@@ -50,4 +50,9 @@ public class RecolteController {
     public List<recolte> listerRecoltesParTypeCulture(@PathVariable String typeCulture) {
         return recolteService.listerRecoltesParTypeCulture(typeCulture);
     }
+
+    @GetMapping("/quantite-total/{typeCulture}")
+    public Double obtenirQuantiteTotaleParTypeCulture(@PathVariable String typeCulture) {
+        return recolteService.obtenirQuantiteTotaleParTypeCulture(typeCulture);
+    }
 }

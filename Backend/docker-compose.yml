@@ -1,21 +1,27 @@
 version: "3.3"
 services:
- # nom du conteneur eureka
+  # nom du conteneur eureka
   discovery:
     build: C:\Agri-back\AgriShare-Back\Backend\EurekaServer
     ports:
-      - "8761:8761" 
+      - "8761:8761"
     image: "eureka"
+    networks:
+      - keycloak-net
 
-  gateway :
-      build: C:\Agri-back\AgriShare-Back\Backend\GateWay
-      environment:
-        - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka
-      ports:
-        - "8096:8096"
-      image: "gateway"
+  # nom du conteneur gateway
+  geteway:
+    build: C:\Agri-back\AgriShare-Back\Backend\\GateWay
+    container_name: geteway
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+    ports:
+      - "8096:8096"
+    image: "gateway"
+    networks:
+      - keycloak-net
 
- # nom du conteneur projet(MongoDB)
+  # nom du conteneur projet(MongoDB)
   projet:
     build: C:\Agri-back\AgriShare-Back\Backend\MS-Projet
     environment:
@@ -27,8 +33,10 @@ services:
     depends_on:
       - discovery
       - mongodb
+    networks:
+      - keycloak-net
 
- #nom du conteneur Recolte(MongoDB)
+  # nom du conteneur Recolte(MongoDB)
   recolte:
     build: C:\Agri-back\AgriShare-Back\Backend\MS-Recolte
     environment:
@@ -40,8 +48,10 @@ services:
     depends_on:
       - discovery
       - mongodb
+    networks:
+      - keycloak-net
 
-# nom du conteneur Ressources(MongoDB)
+  # nom du conteneur Ressources(MongoDB)
   ressources:
     build: C:\Agri-back\AgriShare-Back\Backend\MS-Ressources
     environment:
@@ -53,101 +63,71 @@ services:
     depends_on:
       - discovery
       - mongodb
+    networks:
+      - keycloak-net
+  # nom du conteneur Formation(Mysql)
 
 
- # nom du conteneur Formation(Mysql)
-
-  formation:
-      build: C:\Agri-back\AgriShare-Back\Backend\MS-Formation
-      environment:
-      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
-      - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql:3306/AgriShare?autoReconnect=true&useSSL=false
-      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
-
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=
-      ports:
-      - "8090:8090"
-      image: "formation-service"
-      depends_on:
-      - discovery
-      - docker-mysql
-
-
-
-# nom du conteneur Reclamation(Mysql)
+  # nom du conteneur Reclamation(Mysql)
 
   reclamation:
-      build: C:\Agri-back\AgriShare-Back\Backend\MS-Reclamation
-      environment:
+    build: C:\Agri-back\AgriShare-Back\Backend\MS-Reclamation
+    environment:
       - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql:3306/AgriShare?autoReconnect=true&useSSL=false
-      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
-
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=
-      ports:
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
+    ports:
       - "8092:8092"
-      image: "reclamation-service"
-      depends_on:
+    image: "reclamation-service"
+    depends_on:
       - discovery
       - docker-mysql
+    networks:
+      - keycloak-net
 
-# nom du conteneur Partenariat(Mysql)
+  # nom du conteneur Partenariat(Mysql)
 
   partenariat:
-      build: C:\Agri-back\AgriShare-Back\Backend\MS-Partenariat
-      environment:
+    build: C:\Agri-back\AgriShare-Back\Backend\MS-Partenariat
+    environment:
       - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql:3306/AgriShare?autoReconnect=true&useSSL=false
-      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
-
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=
-      ports:
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
+    ports:
       - "8091:8091"
-      image: "partenariat-service"
-      depends_on:
+    image: "partenariat-service"
+    depends_on:
       - discovery
       - docker-mysql
+    networks:
+      - keycloak-net
 
-        # Service Keycloak
-
-  keycloak:
-    image: quay.io/keycloak/keycloak:23.0.0
-    environment:
-      - DB_VENDOR=mysql
-      - DB_ADDR=docker-mysql:3306
-      - DB_DATABASE=AgriShare
-      - DB_USER=keycloak
-      - DB_PASSWORD=password
+  front-service:
+    build: C:\Agri-front\AgriShare-Front
     ports:
-      - "8180:8080"
+      - 4200:4200
     depends_on:
-      - docker-mysql
-    command:
-      - "start-dev"
-      - "-Dkeycloak.migration.action=import"
-      - "-Dkeycloak.migration.provider=dir"
-      - "-Dkeycloak.migration.dir=/opt/keycloak/migration"
-    volumes:
-      - ./keycloak_data:/opt/keycloak/migration
-#    networks:
-#      - keycloak-net
+      - geteway
 
-    # nom du conteneur Mysql
+  # nom du conteneur Mysql
   docker-mysql:
-      image: "mysql:5.6"
-      environment:
-        - MYSQL_ROOT_PASSWORD=root
-        - MYSQL_DATABASE=AgriShare
-        - MYSQL_USER=keycloak
-        - MYSQL_PASSWORD=password
-      ports:
-        - 3308:3306
-#      networks:
-#        - keycloak-net
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=AgriShare
+      - MYSQL_USER=keycloak               # Utilisateur MySQL pour Keycloak
+      - MYSQL_PASSWORD=password          # Mot de passe de l'utilisateur keycloak
+    ports:
+      - 3308:3306
+    networks:
+      - keycloak-net
 
+
+  # nom du conteneur MongoDB
   mongodb:
     image: "mongo:latest"
     environment:
@@ -155,8 +135,10 @@ services:
     ports:
       - 27017:27017
     networks:
-      - default
+      - keycloak-net
+volumes:
+  db-data:
 
-#networks:
-#  keycloak-net:
-#    driver: bridge
+networks:
+  keycloak-net:
+    driver: bridge
