@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("ressources")
-@CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor
 public class RessourcesController {
     RessourcesService ressourcesService;
