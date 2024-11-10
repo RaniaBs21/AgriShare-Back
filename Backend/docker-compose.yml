@@ -104,7 +104,7 @@ services:
       - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql:3306/AgriShare?autoReconnect=true&useSSL=false
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
     ports:
       - "8091:8091"
