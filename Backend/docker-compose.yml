@@ -86,7 +86,7 @@ services:
       - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql:3306/AgriShare?autoReconnect=true&useSSL=false
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
     ports:
       - "8092:8092"
@@ -114,12 +114,12 @@ services:
       - docker-mysql
 
 
-  front-service:
-    build: D:\5SAE5\AgriShare-project\front\Frontoffice\AgriShare-front
-    ports:
-      - 4200:4200
-    depends_on:
-      - geteway
+#  front-service:
+#    build: D:\5SAE5\AgriShare-project\front\Frontoffice\AgriShare-front
+#    ports:
+#      - 4200:4200
+#    depends_on:
+#      - geteway
 
 
     # Keycloak avec MySQL
