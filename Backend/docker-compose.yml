@@ -114,6 +114,18 @@ services:
       - docker-mysql
 
 
+  ms-user:
+    build: D:\5SAE5\AgriShare-project\back\AgriShare\Backend\MS-User
+    environment:
+      - EUREKA_SERVER=http://discovery:8761/eureka
+      - MONGO_URI=mongodb://mongodb:27017/AgriShare
+    ports:
+      - "3001:3000"
+    image: "user-service"
+    depends_on:
+      - discovery
+      - mongodb
+
 #  front-service:
 #    build: D:\5SAE5\AgriShare-project\front\Frontoffice\AgriShare-front
 #    ports:

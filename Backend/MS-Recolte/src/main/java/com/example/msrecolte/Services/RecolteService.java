@@ -42,5 +42,8 @@ public class RecolteService {
     public List<recolte> listerRecoltesParTypeCulture(String typeCulture) {
         return recolteRepository.findByTypeCulture(typeCulture);
     }
+    public Double obtenirQuantiteTotaleParTypeCulture(String typeCulture) {
+        return recolteRepository.sumQuantiteByTypeCulture(typeCulture);
+    }
 
 }

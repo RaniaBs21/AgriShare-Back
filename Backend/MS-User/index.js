@@ -4,13 +4,12 @@ const port = 3000;
 const { Eureka } = require('eureka-js-client'); // Importer Eureka client
 
 const mongoose = require('mongoose'); // Importer Mongoose
-const User = require('./models/User'); // Importer le modèle User
 
 // Middleware pour parser le JSON
 app.use(express.json());
 
 // Connexion à MongoDB
-mongoose.connect('mongodb://localhost:27017/AgriShare', {
+mongoose.connect('mongodb://mongodb:27017/AgriShare', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -83,32 +82,27 @@ app.listen(port, () => {
 
 
 // Configuration du client Eureka
+
 const client = new Eureka({
     instance: {
-        app: 'MS-USER', // Nom du service dans Eureka
-        hostName: `localhost:MS-User:${port}`,
+        app: 'MS-USER',
+        hostName: 'user-ms:${port}', // Nom du conteneur pour éviter des problèmes de DNS Docker
         ipAddr: '127.0.0.1',
-        port: {
+            port: {
             '$': port,
-            '@enabled': true
+                '@enabled': true
         },
         vipAddress: 'ms-user',
-        statusPageUrl: `http://localhost:${port}`,
-        healthCheckUrl: `http://localhost:${port}/health`,
-        dataCenterInfo: {
-            '@class': 'com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo',
-            name: 'MyOwn'
+            statusPageUrl: 'http://localhost:${port}',
+            healthCheckUrl: 'http://localhost:${port}/health',
+                dataCenterInfo: {
+                    '@class': 'com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo',
+                        name: 'MyOwn'
+                }
+        },
+        eureka: {
+            host: 'discovery', // Utilisation du nom de service Docker
+                port: 8761,
+                servicePath: '/eureka/apps/'
         }
-    },
-    eureka: {
-        host: 'localhost',
-        port: 8761, // Port d’Eureka Server
-        servicePath: '/eureka/apps/'
-    }
-});
-
-// Démarrer l’enregistrement dans Eureka
-client.start(error => {
-    console.log(error ? `Erreur lors de l’enregistrement dans Eureka: ${error}` : 'Enregistré avec succès dans Eureka');
-});
-
+    });

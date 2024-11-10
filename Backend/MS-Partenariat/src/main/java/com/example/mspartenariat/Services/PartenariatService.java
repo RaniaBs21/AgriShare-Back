@@ -3,10 +3,14 @@ package com.example.mspartenariat.Services;
 import com.example.mspartenariat.Entities.Partenariat;
 import com.example.mspartenariat.Repositories.PartenariatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PartenariatService {
@@ -67,4 +71,10 @@ public class PartenariatService {
     public Partenariat findPartenariatByIdOrEmail(int id, String email) {
         return partenariatRepository.findById(id).orElseGet(() -> partenariatRepository.findByEmail(email).orElse(null));
     }
+
+    public Optional<Partenariat> getPartenariatById(int id) {
+        return partenariatRepository.findById(id);
+    }
+
+
 }

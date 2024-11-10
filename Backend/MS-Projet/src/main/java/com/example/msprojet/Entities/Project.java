@@ -1,5 +1,6 @@
 package com.example.msprojet.Entities;
 
+import jakarta.persistence.ElementCollection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,5 +27,6 @@ public class Project {
     private LocalDate dateFin;
     private List<String> etapes; // Liste des étapes du projet
     private Statut statut; // Statut du projet, ex: "En cours", "Terminé"
-    private String cooperativeId;
+    @ElementCollection
+    private Set<Integer> favoritePartenariat = new HashSet<>();
 }

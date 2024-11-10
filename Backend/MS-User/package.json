@@ -2,11 +2,10 @@
   "name": "MS-User",
   "version": "1.0.0",
   "dependencies": {
+    "axios": "^1.7.7",
     "eureka-js-client": "^4.5.0",
     "express": "^4.21.1",
     "express-session": "^1.18.1",
-    "keycloak-admin": "^1.14.22",
-    "keycloak-connect": "23.0.0",
     "mongoose": "^8.8.0"
   },
   "scripts": {

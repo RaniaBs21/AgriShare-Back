@@ -30,10 +30,11 @@ public class GateWayApplication {
                         .uri("http://formation:8090/"))
                 .route("MS-Partenariat", r->r.path("/partenariat/**")
                         .uri("http://partenariat:8091/"))
-                .build();
                 // Nouvelle route pour le microservice Node.js MS-User
-                /* .route("MS-User", r -> r.path("/user/**")
-                         .uri("http://localhost:3000/"))*/
+                 .route("MS-User", r -> r.path("/user/**")
+                         .uri("http://user:3001/"))
+                .build();
+
     }
 
 }

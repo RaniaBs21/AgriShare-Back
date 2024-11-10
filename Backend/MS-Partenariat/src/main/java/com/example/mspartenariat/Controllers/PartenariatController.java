@@ -68,4 +68,11 @@ public class PartenariatController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Partenariat> getPartenariatById(@PathVariable int id) {
+        return partenariatService.getPartenariatById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

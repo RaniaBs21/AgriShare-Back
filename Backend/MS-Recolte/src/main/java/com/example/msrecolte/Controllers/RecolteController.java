@@ -31,11 +31,11 @@ public class RecolteController {
     }
 
 
-
     @GetMapping("/{id}")
     public recolte obtenirRecolteParId(@PathVariable String id) {
         return recolteService.obtenirRecolteParId(id);
     }
+
     @GetMapping("/AllRecoltes")
     public List<recolte> obtenirRecoltes() {
         return recolteService.obtenirRecoltes();
@@ -49,5 +49,10 @@ public class RecolteController {
     @GetMapping("/types-culture/{typeCulture}")
     public List<recolte> listerRecoltesParTypeCulture(@PathVariable String typeCulture) {
         return recolteService.listerRecoltesParTypeCulture(typeCulture);
+    }
+
+    @GetMapping("/quantite-total/{typeCulture}")
+    public Double obtenirQuantiteTotaleParTypeCulture(@PathVariable String typeCulture) {
+        return recolteService.obtenirQuantiteTotaleParTypeCulture(typeCulture);
     }
 }

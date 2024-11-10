@@ -1,9 +1,11 @@
 package com.example.msprojet.Controllers;
 
+import com.example.msprojet.Entities.Partenariat;
 import com.example.msprojet.Entities.Project;
 import com.example.msprojet.Services.ProjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,12 +29,14 @@ public class ProjectController {
     public List<Project> getAllProjects() {
         return projectService.getAllProjects();
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable String id) {
         return projectService.getProjectById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<Project> updateProject(@PathVariable String id, @RequestBody Project projectDetails) {
         Optional<Project> updatedProject = projectService.updateProject(id, projectDetails);
@@ -45,7 +49,35 @@ public class ProjectController {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
     }
+    @RequestMapping("/partenariats")
+    public List<Partenariat> getAllPartenariat() {
+        return projectService.getPartenariats();
+    }
+    @RequestMapping("partenariat/{id}")
+    public Partenariat getPartenariatById(@PathVariable int id) {
+        return projectService.getPartenariatById(id);
+    }
 
+    @GetMapping("/{id}/favorite-partenariat")
+    public List<Partenariat> getFavoritePartenariat(@PathVariable String id) {
+        return projectService.getFavoritePartenariat(id);
+    }
+
+
+
+    @PostMapping("/{id}/favorite-partenariat/{partenariatId}")
+    public ResponseEntity<String> saveFavoriteJob(@PathVariable String id, @PathVariable int partenariatId) {
+        Partenariat partenariat = projectService.getPartenariatById(partenariatId);
+        if (partenariat != null) {
+            projectService.saveFavoritePartenariat(id, partenariatId);
+            return ResponseEntity.status(HttpStatus.OK).body("Partenariat saved as favorite successfully.");
+
+        } else {
+            // Gérer le cas où le job n'existe pas
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Partenariat not found with ID: " + partenariatId);
+        }
+    }
 
     /*@PostMapping(
             value = "/admin/add",
