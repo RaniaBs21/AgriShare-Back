@@ -15,6 +15,7 @@ public class FormationService {
     @Autowired
     private FormationRepo formationRepository ;
 
+
     public Formation addFormation(Formation formation){return formationRepository.save(formation);}
     public List<Formation> getAllFormation(){return formationRepository.findAll();}
 

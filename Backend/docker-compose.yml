@@ -46,6 +46,7 @@ services:
     depends_on:
       - discovery
       - mongodb
+      - config-server
 
 
   # nom du conteneur Ressources(MongoDB)
@@ -60,6 +61,7 @@ services:
     depends_on:
       - discovery
       - mongodb
+      - config-server
 
   # nom du conteneur Formation(Mysql)
 
@@ -77,6 +79,7 @@ services:
     depends_on:
       - discovery
       - docker-mysql
+      - config-server
 
 
   # nom du conteneur Reclamation(Mysql)
@@ -95,6 +98,7 @@ services:
     depends_on:
       - discovery
       - docker-mysql
+      - config-server
 
 
   # nom du conteneur Partenariat(Mysql)
@@ -113,12 +117,14 @@ services:
     depends_on:
       - discovery
       - docker-mysql
+      - config-server
 
 
   ms-user:
     build: D:\5SAE5\AgriShare-project\back\AgriShare\Backend\MS-User
     environment:
-      - EUREKA_SERVER=http://discovery:8761/eureka
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+#      - EUREKA_SERVER=http://discovery:8761/eureka
       - MONGO_URI=mongodb://mongodb:27017/AgriShare
     ports:
       - "3001:3000"
@@ -141,15 +147,41 @@ services:
     depends_on:
       - discovery
 
-#  front-service:
-#    build: D:\5SAE5\AgriShare-project\front\Frontoffice\AgriShare-front
-#    ports:
-#      - 4200:4200
-#    depends_on:
-#      - geteway
+  front-service:
+    build: D:\5SAE5\AgriShare-project\front\Frontoffice\AgriShare-front
+    ports:
+      - 4200:4200
+    depends_on:
+      - geteway
 
 
-    # Keycloak avec MySQL
+
+
+  # nom du conteneur Mysql
+  docker-mysql:
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=AgriShare
+    ports:
+      - 3308:3306
+
+
+
+  # nom du conteneur MongoDB
+  mongodb:
+    image: "mongo:latest"
+    environment:
+      - MONGO_INITDB_DATABASE=AgriShare
+    ports:
+      - 27017:27017
+
+volumes:
+  db-data:
+
+
+
+  # Keycloak avec MySQL
 #  keycloak:
 #    image: quay.io/keycloak/keycloak:23.0.0
 #    environment:
@@ -174,16 +206,6 @@ services:
 #    networks:
 #      - keycloak-net
 
-  # nom du conteneur Mysql
-  docker-mysql:
-    image: "mysql:5.6"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=AgriShare
-    ports:
-      - 3308:3306
-
-
 #  keycloak-db:
 #    image: "mysql:8.0.38"
 #    environment:
@@ -195,15 +217,3 @@ services:
 #      - 3309:3306
 #    networks:
 #      - keycloak-net
-  # nom du conteneur MongoDB
-  mongodb:
-    image: "mongo:latest"
-    environment:
-      - MONGO_INITDB_DATABASE=AgriShare
-    ports:
-      - 27017:27017
-
-volumes:
-  db-data:
-
-

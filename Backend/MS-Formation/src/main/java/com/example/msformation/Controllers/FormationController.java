@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("formation")
-@CrossOrigin(origins = "http://localhost:4200")
 @AllArgsConstructor
 public class FormationController {
     @Autowired
@@ -25,6 +24,7 @@ public class FormationController {
         Formation createdFormation = formationService.addFormation(formation);
         return new ResponseEntity<>(createdFormation, HttpStatus.CREATED);
     }
+
 
     // Obtenir toutes les formations
     @GetMapping
